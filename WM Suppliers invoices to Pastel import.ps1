@@ -4,10 +4,10 @@
 $inspreadsheet = 'C:\userdata\circe launches\_all suppliers\supplier invoices cash vouchers 2021.xlsx'          #Source workbook
 $csvfile = 'suppliers_1.csv'                                                                                    #Temp file
 $pathout = 'C:\userdata\circe launches\_all suppliers\'
-$custsheet = 'july 2020'                                                                        #Month worksheet - changes each month
-$outfile2 = 'C:\userdata\circe launches\_all suppliers\suppliers july 2020_2.csv'                  #Change each month
+$custsheet = 'september 2020'                                                                        #Month worksheet - changes each month
+$outfile2 = 'C:\userdata\circe launches\_all suppliers\suppliers september 2020_1.csv'                  #Change each month
 $startR = 2                                             #Start row - does not change       
-$endR = 46                                              #End Row - changes each month depending on number of invoices
+$endR = 22                                              #End Row - changes each month depending on number of invoices
 $startCol = 1                                           #Start Col (don't change)
 $endCol = 10                                             #End Col (don't change)
 $filter= "CSH"                                          #Filter - Not CASH VOUCHERS - SER Where-Object BELOW
