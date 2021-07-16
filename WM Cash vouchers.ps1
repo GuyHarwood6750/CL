@@ -2,11 +2,11 @@
         Modify the $StartR (startrow) and $endR (endrow).
                 This can only be done by eyeball as spreadsheet has historical data.
 #>
-$inspreadsheet = 'C:\userdata\circe launches\_All Suppliers\Supplier invoices cash vouchers 2021.xlsx'
-$outfile2 = 'C:\userdata\circe launches\_All Suppliers\CSH september 2021_1.csv'
-$custsheet = 'september 2020'                                #Month worksheet
+$inspreadsheet = 'C:\userdata\circe launches\_All Suppliers\Supplier invoices cash vouchers 2021.xlsm'
+$outfile2 = 'C:\userdata\circe launches\_All Suppliers\CSH JUNE 2020_1.csv'
+$custsheet = 'JUNE 2021'                                #Month worksheet
 $startR = 2                                             #Start row - do not change
-$endR = 22                                              #End Row - change if necessary depending on number of purchases
+$endR = 46                                              #End Row - change if necessary depending on number of purchases
 $csvfile = 'SHEET1.csv'
 $pathout = 'C:\userdata\circe launches\_All Suppliers\'
 $startCol = 1                                                                   #Start Col (don't change)
@@ -18,18 +18,7 @@ $Outfile = $pathout + $csvfile
 
 Import-Excel -Path $inspreadsheet -WorksheetName $custsheet -StartRow $startR -StartColumn $startCol -EndRow $endR -EndColumn $endCol -NoHeader -DataOnly| Where-Object -Filterscript { $_.P1 -eq $filter -and $_.p9 -eq 'cash'-and $_.P10 -ne 'done'} | Export-Csv -Path $Outfile -NoTypeInformation
 
-Get-ChildItem -Path $pathout -Name $csvfile
-$xl = New-Object -ComObject Excel.Application
-$xl.Visible = $false
-$xl.DisplayAlerts = $false
-$wb = $xl.workbooks.Open($Outfile)
-$xl.Sheets.Item('sheet1').Activate()
-$range = $xl.Range("c:c").Entirecolumn
-$range.NumberFormat = 'dd/mm/yyyy'
-
-$wb.save()
-$xl.Workbooks.Close()
-$xl.Quit()
+ExcelFormatDate -file $Outfile -sheet 'sheet1' -column 'C:C'
 
 Get-Content -Path $outfile | Select-Object -skip 1 | Set-Content -path $outfile2
 Remove-Item -Path $outfile
@@ -46,17 +35,22 @@ foreach ($aObj in $data) {
     $pastelper = PastelPeriods -transactiondate $aObj.date
     
     Switch ($aObj.Expacc) {
-        CLN { $expacc = '3210000' }            #Cleaning
+        ADVERTISING { $expacc = '3050000' }            #Cleaning
+        Cleaning { $expacc = '3210000' }            #Cleaning
+        COMP { $expacc = '3300000' }            #Computer expenses
         FUEL { $expacc = '4150000' }         #Motor vehicles
         GIFT { $expacc = '3551000' }            #Trade Gifts
+        KWE { $expacc = '5600472' }            #Ken Evans Loan Account
         MED { $expacc = '4500000' }            #Medical expenses, Staff welfare
         MVE { $expacc = '4150000' }         #Motor vehicles
         PC { $expacc = '4550000' }            #Protective clothing
+        POBOX { $expacc = '3400000' }            #Post Office box
         RENT { $expacc = '4300000' }            #Rent
         RM { $expacc = '4350000' }            #Repairs and Maintenance
         REF { $expacc = '4500000' }            #Staff refreshments
+        RWE { $expacc = '5600473' }            #Richard Evans Loan Account
         SS { $expacc = '3750000' }            #Ship stores & provisions
-        STATIONARY { $expacc = '4200000' }    #Stationery
+        STATIONERY { $expacc = '4200000' }    #Stationery
         TEL { $expacc = '4600000' }            #Telephone
         TETA { $expacc = '4451000' }            #TETA Training
         Default { $expacc = '9992000' }       #Unallocated Expense account      

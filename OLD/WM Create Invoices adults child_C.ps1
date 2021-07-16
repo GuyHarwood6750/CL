@@ -6,9 +6,9 @@ $playsoung = New-Object System.Media.Soundplayer
 $playsoung.SoundLocation = 'C:\Users\Guy\Documents\Powershell\Sound\script start.WAV'
 $playsoung.playsync()
 
-$inspreadsheet = 'C:\userdata\circe launches\InvWM\inv23MarA.xlsx'
+$inspreadsheet = 'C:\userdata\circe launches\InvWM\vch29dec.xlsx'
 $csvfile = 'arrived.csv'                                        
-$csvfile2 = 'inv23MarA.csv'
+$csvfile2 = 'vch29dec.csv'
 $pathout = 'C:\userdata\circe launches\InvWM\'
 $custsheet = 'sheet1'                          #Customer worksheet
 $startR = 1                                   #Start row (don't change)
@@ -33,16 +33,16 @@ $wb.save()
 $xl.Workbooks.Close()
 $xl.Quit()
 #>     
-Get-Content -Path $outfile | Select-Object -skip 1 | Set-Content -path $outfile2
+Get-Content -Path $outfile | Select-Object -skip 1 | Set-Content -path $outfile2    #Remove column header
 Remove-Item -Path $outfile
 <#  
     Get list of invoices from spreadsheet
     Output to text file to be imported as a Pastel Invoice batch.
 #>
-$csvclient = 'c:\userdata\circe launches\invwm\inv23MarA.csv' #Input csv file
+$csvclient = 'c:\userdata\circe launches\invwm\vch29dec.csv' #Input csv file
 $csvrate = 'c:\userdata\circe launches\invwm\rate file\accitemrate.csv'  #Rates per customer
 $outfile = 'c:\userdata\circe launches\invwm\WMinvTmp.txt'     #Temp file
-$outfile2 = 'c:\userdata\circe launches\invwm\WMinv23MarA.txt'  #File to be imported into Pastel
+$outfile2 = 'c:\userdata\circe launches\invwm\WMvch29dec.txt'  #File to be imported into Pastel
 #Remove last file imported to Pastel
 if (Test-Path $outfile2) { Remove-Item $outfile2 }
 #Import latest csv from Client spreadsheet

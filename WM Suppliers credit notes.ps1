@@ -1,23 +1,35 @@
 <#      Extract from EXPENSES spreadsheet the range for new invoices to be generated.
         Modify the $StartR (startrow) and $endR (endrow). 
 #>
-$inspreadsheet = 'C:\userdata\circe launches\_all suppliers\supplier invoices cash vouchers 2021.xlsm'          #Source workbook
+$inspreadsheet = 'C:\userdata\circe launches\_all suppliers\supplier invoices cash vouchers 2021.xlsx'          #Source workbook
 $csvfile = 'suppliers_1.csv'                                                                                    #Temp file
 $pathout = 'C:\userdata\circe launches\_all suppliers\'
-$custsheet = 'JUNE 2021'                                                                        #Month worksheet - changes each month
-$outfile2 = 'C:\userdata\circe launches\_all suppliers\suppliers JUNE 2021_1.csv'                  #Change each month
+$custsheet = 'FEBRUARY 2021'                                                                        #Month worksheet - changes each month
+$outfile2 = 'C:\userdata\circe launches\_all suppliers\suppliers FEBRUARY CN 2021_1.csv'                  #Change each month
 $startR = 2                                             #Start row - does not change       
-$endR = 46                                              #End Row - changes each month depending on number of invoices
+$endR = 26                                              #End Row - changes each month depending on number of invoices
 $startCol = 1                                           #Start Col (don't change)
 $endCol = 10                                             #End Col (don't change)
-#$filter= "CSH"                                          #Filter - Not CASH VOUCHERS - SER Where-Object BELOW
 $Outfile = $pathout + $csvfile
 
-Import-Excel -Path $inspreadsheet -WorksheetName $custsheet -StartRow $startR -StartColumn $startCol -EndRow $endR -EndColumn $endCol -NoHeader -DataOnly | Where-Object -Filterscript { $_.P1 -ne 'CSH' -and $_.P9 -ne 'CN' -and $_.P9 -ne 'BC'-and $_.P10 -ne 'Done' } | Export-Csv -Path $Outfile -NoTypeInformation
+Import-Excel -Path $inspreadsheet -WorksheetName $custsheet -StartRow $startR -StartColumn $startCol -EndRow $endR -EndColumn $endCol -NoHeader -DataOnly | Where-Object -Filterscript { $_.P1 -ne 'CSH' -and $_.P9 -eq 'CN' -and $_.P10 -ne 'Done' } | Export-Csv -Path $Outfile -NoTypeInformation
 
 # Format date column correctly
 ExcelFormatDate -file $Outfile -sheet 'suppliers_1' -column 'C:C'
+<#
+        Get-ChildItem -Path $pathout -Name $csvfile
+        $xl = New-Object -ComObject Excel.Application
+        $xl.Visible = $false
+        $xl.DisplayAlerts = $false
+        $wb = $xl.workbooks.Open($Outfile)
+        $xl.Sheets.Item('suppliers_1').Activate()
+        $range = $xl.Range("c:c").Entirecolumn
+        $range.NumberFormat = 'dd/mm/yyyy'
 
+        $wb.save()
+        $xl.Workbooks.Close()
+        $xl.Quit()
+#>
 Get-Content -Path $outfile | Select-Object -skip 1 | Set-Content -path $outfile2
 Remove-Item -Path $outfile
 
@@ -25,11 +37,11 @@ Remove-Item -Path $outfile
     Output to text file to be imported as a Pastel Invoice batch.
 #>
 #Input from Supplier spreadsheet
-#$csvsupplier = 'C:\userdata\circe launches\_all suppliers\suppliers JUNE 2020_4.csv'
+#$csvsupplier = 'C:\userdata\circe launches\_all suppliers\suppliers june 2020_4.csv'
 #Temp file      
-$outfile1a = 'C:\userdata\circe launches\_all suppliers\supplierinv.txt'
+$outfile1a = 'C:\userdata\circe launches\_all suppliers\supplierCN.txt'
 #File to be imported into Pastel        
-$outfile3 = 'C:\userdata\circe launches\_all suppliers\supplier invoices.txt'     
+$outfile3 = 'C:\userdata\circe launches\_all suppliers\supplier credit notes.txt'     
 
 #Remove last file imported to Pastel
 $checkfile = Test-Path $outfile3
@@ -49,6 +61,13 @@ foreach ($aObj in $data) {
                         $c = VATCalc -amountincvat $amount
                         $vatexamt = $c.vatexamt
                         $vatpercent = $c.vatpercent
+                        <#
+                        [decimal]$amount = $aObj.amt
+                        [decimal]$vat = $amount * 15 / 115
+                        [decimal]$amtexvat = $aObj.amt - $vat
+                        $vatexamt = [math]::Round($amtexvat, 2)
+                        $vatpercent = 15 
+                        #>
                 }
                 N {
                         [decimal] $amount = $aObj.amt
@@ -65,11 +84,9 @@ foreach ($aObj in $data) {
                 ANCH { $expacc = '4350000'; $description = $aObj.desc }
                 ASTRO { $expacc = '4350000'; $description = $aObj.desc }
                 ASPA { $expacc = '4350000'; $description = $aObj.desc }
-                ASSR { $expacc = '4350000'; $description = $aObj.desc }
                 BALT { $expacc = '4350000'; $description = $aObj.desc }
                 BALMA { $expacc = '4350000'; $description = $aObj.desc }
                 BANF { $expacc = '3050000'; $description = $aObj.desc }
-                BER { $expacc = '4350000'; $description = $aObj.desc }
                 BOLTF { $expacc = '4350000'; $description = $aObj.desc }
                 BSAIL { $expacc = '4350000'; $description = $aObj.desc }
                 CAVIC { $expacc = '4350000'; $description = $aObj.desc }
@@ -87,8 +104,6 @@ foreach ($aObj in $data) {
                 FAS1 { $expacc = '4350000'; $description = $aObj.desc }
                 FEW { $expacc = '4350000'; $description = $aObj.desc }
                 FOWBR { $expacc = '4350000'; $description = $aObj.desc }
-                FMG { $expacc = '3000000'; $description = $aObj.desc }
-                FLWT { $expacc = '4350000'; $description = $aObj.desc }
                 GARD { $expacc = '4350000'; $description = $aObj.desc }
                 GRIDH { $expacc = '4600000'; $description = $aObj.desc }
                 GHTM { $expacc = '4150000'; $description = $aObj.desc }
@@ -104,34 +119,23 @@ foreach ($aObj in $data) {
                 NDE { $expacc = '4350000'; $description = $aObj.desc }
                 MANEX { $expacc = '4350000'; $description = $aObj.desc }
                 MACSTE { $expacc = '4350000'; $description = $aObj.desc }
-                MLRF { $expacc = '4211000'; $description = $aObj.desc }
                 MSTD { $expacc = '4451000'; $description = $aObj.desc }
                 ORLICH { $expacc = '4350000'; $description = $aObj.desc }
                 PEC { $expacc = '4451000'; $description = $aObj.desc }
-                POT { $expacc = '4350000'; $description = $aObj.desc }
-                PSS { $expacc = '4350000'; $description = $aObj.desc }
                 RADH { $expacc = '4350000'; $description = $aObj.desc }
-                RAP { $expacc = '4150000'; $description = $aObj.desc }
                 REDW { $expacc = '4451000'; $description = $aObj.desc }
-                RFA { $expacc = '4350000'; $description = $aObj.desc }
                 RPW { $expacc = '4200000'; $description = $aObj.desc }
                 RWOOD { $expacc = '4350000'; $description = $aObj.desc }
                 SATSA { $expacc = '4502000'; $description = $aObj.desc }
-                SAMSA { $expacc = '4350000'; $description = $aObj.desc }
-                SAVA { $expacc = '4350000'; $description = $aObj.desc }
-                SEAP { $expacc = '4350000'; $description = $aObj.desc }
                 SONOM { $expacc = '4350000'; $description = $aObj.desc }
                 SIGARA { $expacc = '3750000'; $description = $aObj.desc }
                 SIGC { $expacc = '4350000'; $description = $aObj.desc }
-                SUPA { $expacc = '4150000'; $description = $aObj.desc }
                 TLK { $expacc = '4600000'; $description = $aObj.desc }
-                TLOCK { $expacc = '4350000'; $description = $aObj.desc }
                 TONM { $expacc = '4150000'; $description = $aObj.desc }
                 VESC { $expacc = '4350000'; $description = $aObj.desc }
-                VONMOT { $expacc = '4150000'; $description = $aObj.desc }
+                VONMOT { $expacc = '4350000'; $description = $aObj.desc }
                 VIKING { $expacc = '4350000'; $description = $aObj.desc }
                 WINK { $expacc = '4050000'; $description = $aObj.desc }
-                WOKD { $expacc = '4550000'; $description = $aObj.desc }
                 Default {$aObj.Acc = "" }
         
         }

@@ -1,12 +1,6 @@
-#Warren Marine - Guy Harwood
+﻿#Warren Marine - Guy Harwood
 #Purpose: To copy the SQL database file from Server location to local USB drive & Dropbox.
 #
-#
-    $vpnok = Get-VpnConnection
-    $locallconn = Test-NetConnection -ComputerName "wserver.wmarine.local" -InformationLevel Detailed
-
-if ($vpnok.ConnectionStatus -eq 'connected')
-    {
             $sourcepath = "\\wserver\backup"
             $destpath = "D:\Circe Launches Backups\SQL Circe Bookings"
             $dropbox ="C:\Users\Guy\Dropbox\SCS\Circe Launches"
