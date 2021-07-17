@@ -82,6 +82,24 @@ Switch ($suppliername) {
             }      
          }               
       } 
+      CELLC {
+         $sourceAllFiles = $serverbasefiles + $month + $year
+         $destFile = $serverbasefiles + $month + $year + '\' + "Cell C\"
+         if (-Not (Test-Path -Path $destFile)) {
+            Write-Error -Message "Folder does not exist '$destFile'. Error was: $_" -ErrorAction Stop
+         }
+         else {
+            $bs = Get-ChildItem -Path $sourceALLFiles -file
+            foreach ($bsf in $bs) {
+               if ($bsf.name -like 'CellC*.*') {
+                  $file = $bsf.Name
+                  Move-Item -Path $sourceALLFiles\$file -Destination $destFile   
+               }
+               else {
+               }
+            }      
+         }               
+      } 
       GOOGLE {
          $sourceAllFiles = $serverbasefiles + $month + $year
          $destFile = $serverbasefiles + $month + $year + '\' + "GOOGLE\"
@@ -140,6 +158,7 @@ Switch ($suppliername) {
 }
 #A1 -suppliername 'CASH' -month '05July'
 #A1 -suppliername 'CARD' -month '05July'
+A1 -suppliername 'CELLC' -month '05July'
 #A1 -suppliername 'BASTICKS' -month '05July'
 #A1 -suppliername 'DANSHAW' -month '05July'
 #A1 -suppliername '1 Grid' -month '05July'
