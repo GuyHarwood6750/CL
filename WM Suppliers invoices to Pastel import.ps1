@@ -4,10 +4,10 @@
 $inspreadsheet = 'C:\userdata\circe launches\_all suppliers\supplier invoices cash vouchers 2021.xlsm'          #Source workbook
 $csvfile = 'suppliers_1.csv'                                                                                    #Temp file
 $pathout = 'C:\userdata\circe launches\_all suppliers\'
-$custsheet = 'JUNE 2021'                                                                        #Month worksheet - changes each month
-$outfile2 = 'C:\userdata\circe launches\_all suppliers\suppliers JUNE 2021_1.csv'                  #Change each month
+$custsheet = 'JULY 2021'                                                                        #Month worksheet - changes each month
+$outfile2 = 'C:\userdata\circe launches\_all suppliers\suppliers JULY 2021_1.csv'                  #Change each month
 $startR = 2                                             #Start row - does not change       
-$endR = 46                                              #End Row - changes each month depending on number of invoices
+$endR = 11                                              #End Row - changes each month depending on number of invoices
 $startCol = 1                                           #Start Col (don't change)
 $endCol = 10                                             #End Col (don't change)
 #$filter= "CSH"                                          #Filter - Not CASH VOUCHERS - SER Where-Object BELOW
@@ -25,7 +25,7 @@ Remove-Item -Path $outfile
     Output to text file to be imported as a Pastel Invoice batch.
 #>
 #Input from Supplier spreadsheet
-#$csvsupplier = 'C:\userdata\circe launches\_all suppliers\suppliers JUNE 2020_4.csv'
+#$csvsupplier = 'C:\userdata\circe launches\_all suppliers\suppliers JULY 2020_4.csv'
 #Temp file      
 $outfile1a = 'C:\userdata\circe launches\_all suppliers\supplierinv.txt'
 #File to be imported into Pastel        

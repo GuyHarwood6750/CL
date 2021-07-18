@@ -3,10 +3,10 @@
                 This can only be done by eyeball as spreadsheet has historical data.
 #>
 $inspreadsheet = 'C:\userdata\circe launches\_All Suppliers\Supplier invoices cash vouchers 2021.xlsm'
-$outfile2 = 'C:\userdata\circe launches\_All Suppliers\CSH JUNE 2020_1.csv'
-$custsheet = 'JUNE 2021'                                #Month worksheet
+$outfile2 = 'C:\userdata\circe launches\_All Suppliers\CSH JULY 2020_1.csv'
+$custsheet = 'JULY 2021'                                #Month worksheet
 $startR = 2                                             #Start row - do not change
-$endR = 46                                              #End Row - change if necessary depending on number of purchases
+$endR = 11                                              #End Row - change if necessary depending on number of purchases
 $csvfile = 'SHEET1.csv'
 $pathout = 'C:\userdata\circe launches\_All Suppliers\'
 $startCol = 1                                                                   #Start Col (don't change)
