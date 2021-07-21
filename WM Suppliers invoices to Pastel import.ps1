@@ -7,13 +7,13 @@ $pathout = 'C:\userdata\circe launches\_all suppliers\'
 $custsheet = 'JULY 2021'                                                                        #Month worksheet - changes each month
 $outfile2 = 'C:\userdata\circe launches\_all suppliers\suppliers JULY 2021_1.csv'                  #Change each month
 $startR = 2                                             #Start row - does not change       
-$endR = 11                                              #End Row - changes each month depending on number of invoices
+$endR = 18                                              #End Row - changes each month depending on number of invoices
 $startCol = 1                                           #Start Col (don't change)
 $endCol = 10                                             #End Col (don't change)
 #$filter= "CSH"                                          #Filter - Not CASH VOUCHERS - SER Where-Object BELOW
 $Outfile = $pathout + $csvfile
 
-Import-Excel -Path $inspreadsheet -WorksheetName $custsheet -StartRow $startR -StartColumn $startCol -EndRow $endR -EndColumn $endCol -NoHeader -DataOnly | Where-Object -Filterscript { $_.P1 -ne 'CSH' -and $_.P9 -ne 'CN' -and $_.P9 -ne 'BC'-and $_.P10 -ne 'Done' } | Export-Csv -Path $Outfile -NoTypeInformation
+Import-Excel -Path $inspreadsheet -WorksheetName $custsheet -StartRow $startR -StartColumn $startCol -EndRow $endR -EndColumn $endCol -NoHeader -DataOnly | Where-Object -Filterscript { $_.P1 -eq 'GULF' -and $_.P9 -ne 'CN' -and $_.P9 -ne 'BC'-and $_.P10 -ne 'Done' } | Export-Csv -Path $Outfile -NoTypeInformation
 
 # Format date column correctly
 ExcelFormatDate -file $Outfile -sheet 'suppliers_1' -column 'C:C'
@@ -93,6 +93,7 @@ foreach ($aObj in $data) {
                 GRIDH { $expacc = '4600000'; $description = $aObj.desc }
                 GHTM { $expacc = '4150000'; $description = $aObj.desc }
                 GHTW { $expacc = '4150000'; $description = $aObj.desc }
+                GULF { $expacc = '3800000'; $description = $aObj.desc }
                 HARW { $expacc = '3000000'; $description = $aObj.desc }
                 HBON { $expacc = '4200000'; $description = $aObj.desc }
                 HBYC { $expacc = '4300000'; $description = $aObj.desc }
