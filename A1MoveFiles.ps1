@@ -118,6 +118,24 @@ Switch ($suppliername) {
             }      
          }               
       } 
+      GULFSTREAM {
+         $sourceAllFiles = $serverbasefiles + $month + $year
+         $destFile = $serverbasefiles + $month + $year + '\' + "Gulfstream\"
+         if (-Not (Test-Path -Path $destFile)) {
+            Write-Error -Message "Folder does not exist '$destFile'. Error was: $_" -ErrorAction Stop
+         }
+         else {
+            $bs = Get-ChildItem -Path $sourceALLFiles -file
+            foreach ($bsf in $bs) {
+               if ($bsf.name -like 'Gulfstream*.*') {
+                  $file = $bsf.Name
+                  Move-Item -Path $sourceALLFiles\$file -Destination $destFile   
+               }
+               else {
+               }
+            }      
+         }               
+      } 
       FOWKES {
          $sourceAllFiles = $serverbasefiles + $month + $year
          $destFile = $serverbasefiles + $month + $year + '\' + "Fowkes Bros\"
@@ -158,9 +176,10 @@ Switch ($suppliername) {
 }
 #A1 -suppliername 'CASH' -month '05July'
 #A1 -suppliername 'CARD' -month '05July'
-A1 -suppliername 'CELLC' -month '05July'
+#A1 -suppliername 'CELLC' -month '05July'
 #A1 -suppliername 'BASTICKS' -month '05July'
 #A1 -suppliername 'DANSHAW' -month '05July'
 #A1 -suppliername '1 Grid' -month '05July'
 #A1 -suppliername 'GOOGLE' -month '05July'
 #A1 -suppliername 'Fowkes' -month '04June'
+#A1 -suppliername 'Gulfstream' -month '05July'
